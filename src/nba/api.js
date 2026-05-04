@@ -14,8 +14,12 @@ function isRetryableError(error) {
   return error?.name === 'AbortError' || status === 429 || status >= 500;
 }
 
+const NBA_PROXY_URL = import.meta.env.VITE_NBA_PROXY_URL || '/api/nba';
+
 export async function nbaRequest(endpoint, params) {
-  const url = new URL('/api/nba', window.location.origin);
+  const url = NBA_PROXY_URL.startsWith('http')
+    ? new URL(NBA_PROXY_URL)
+    : new URL(NBA_PROXY_URL, window.location.origin);
   url.searchParams.set('endpoint', endpoint);
 
   Object.entries(params || {}).forEach(([key, value]) => {
