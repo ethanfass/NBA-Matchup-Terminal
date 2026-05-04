@@ -50,7 +50,10 @@ export default async (request) => {
   }
 
   try {
-    const response = await fetch(apiUrl.toString(), { headers: NBA_HEADERS });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    const response = await fetch(apiUrl.toString(), { headers: NBA_HEADERS, signal: controller.signal });
+    clearTimeout(timeout);
 
     if (!response.ok) {
       return json({ error: `NBA stats returned ${response.status}` }, response.status);
