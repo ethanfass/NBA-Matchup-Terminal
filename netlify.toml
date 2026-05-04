@@ -2,7 +2,8 @@
   command = "npm run build"
   publish = "dist"
 
-[[redirects]]
-  from = "/api/nba"
-  to = "/.netlify/functions/nba"
-  status = 200
+[functions]
+  node_bundler = "esbuild"
+
+[functions.nba]
+  timeout = 26
