@@ -1,0 +1,22 @@
+data/*.db-shm
+data/*.db-wal
+
+# deps
+node_modules/
+
+# build output
+dist/
+.netlify/
+
+# logs
+*.log
+vite-*.log
+vite-*.err.log
+
+# local/editor
+.vscode/
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
