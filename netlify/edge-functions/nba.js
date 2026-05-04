@@ -20,17 +20,10 @@ const ALLOWED_ENDPOINTS = new Set([
 const NBA_HEADERS = {
   Accept: 'application/json, text/plain, */*',
   'Accept-Language': 'en-US,en;q=0.9',
-  'Accept-Encoding': 'gzip, deflate, br, zstd',
   'Cache-Control': 'no-cache',
   Origin: 'https://www.nba.com',
   Pragma: 'no-cache',
   Referer: 'https://www.nba.com/',
-  'Sec-Ch-Ua': '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
-  'Sec-Ch-Ua-Mobile': '?0',
-  'Sec-Ch-Ua-Platform': '"Windows"',
-  'Sec-Fetch-Dest': 'empty',
-  'Sec-Fetch-Mode': 'cors',
-  'Sec-Fetch-Site': 'same-site',
   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
   'x-nba-stats-origin': 'stats',
   'x-nba-stats-token': 'true'
@@ -64,6 +57,11 @@ export default async (request) => {
     }
 
     const text = await response.text();
+    try {
+      JSON.parse(text);
+    } catch {
+      return json({ error: 'NBA stats returned a non-JSON response (likely blocked)' }, 502);
+    }
     return new Response(text, {
       status: 200,
       headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=3600' }
